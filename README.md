@@ -81,7 +81,6 @@ variable "bucket_name" {
   default     = "netology-bucket-student-unique-id"
 }
 
-# ID образа для создания ВМ (LAMP).
 variable "lamp_image_id" {
   type        = string
   default     = "fd827b91d99psvq5fjit"
