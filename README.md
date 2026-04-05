@@ -144,32 +144,26 @@ resource "yandex_iam_service_account_static_access_key" "sa_key" {
 
 ### 3. Файл `s3.tf`
 ```Hcl
-# s3.tf
-
-# Создание бакета Object Storage
 resource "yandex_storage_bucket" "img_bucket" {
   access_key = yandex_iam_service_account_static_access_key.sa_key.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa_key.secret_key
   bucket     = var.bucket_name
 
-  # Ожидаем, пока сервисному аккаунту назначится роль storage.admin
   depends_on = [yandex_resourcemanager_folder_iam_member.sa_storage]
 
-  # Включение публичного доступа к бакету на чтение (современный способ)
   anonymous_access_flags {
     read = true
     list = false
   }
 }
 
-# Загрузка файла картинки в бакет
 resource "yandex_storage_object" "picture" {
   access_key = yandex_iam_service_account_static_access_key.sa_key.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa_key.secret_key
   bucket     = yandex_storage_bucket.img_bucket.id
-  key        = "image.png"          # Имя файла в бакете
-  source     = "image.png"          # Путь к файлу на вашем компьютере
-  acl        = "public-read"        # Разрешение на чтение файла
+  key        = "image.png"
+  source     = "image.png"
+  acl        = "public-read"
 }
 ```
 
